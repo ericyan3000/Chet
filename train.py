@@ -18,8 +18,8 @@ def historical_hot(code_x, code_num, lens):
 
 
 if __name__ == '__main__':
-    seed = 6669
-    dataset = 'mimic4'  # 'mimic3' or 'eicu'
+    seed = 1000
+    dataset = 'mimic3'  # 'mimic3' or 'eicu'
     task = 'h'  # 'm' or 'h'
     use_cuda = True
     device = torch.device('cuda' if torch.cuda.is_available() and use_cuda else 'cpu')
@@ -30,7 +30,7 @@ if __name__ == '__main__':
     t_attention_size = 32
     t_output_size = hidden_size
     batch_size = 32
-    epochs = 200
+    epochs = 100
 
     random.seed(seed)
     np.random.seed(seed)

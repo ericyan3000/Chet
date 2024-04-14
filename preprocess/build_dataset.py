@@ -4,28 +4,31 @@ from preprocess.parse_csv import EHRParser
 
 
 def split_patients(patient_admission, admission_codes, code_map, train_num, test_num, seed=6669):
+    print("train_num: %d, test_num: %d" % (train_num, test_num))
     np.random.seed(seed)
     common_pids = set()
-    for i, code in enumerate(code_map):
-        print('\r\t%.2f%%' % ((i + 1) * 100 / len(code_map)), end='')
-        for pid, admissions in patient_admission.items():
-            for admission in admissions:
-                codes = admission_codes[admission[EHRParser.adm_id_col]]
-                if code in codes:
-                    common_pids.add(pid)
-                    break
-            else:
-                continue
-            break
-    print('\r\t100%')
-    max_admission_num = 0
-    pid_max_admission_num = 0
-    for pid, admissions in patient_admission.items():
-        if len(admissions) > max_admission_num:
-            max_admission_num = len(admissions)
-            pid_max_admission_num = pid
-    common_pids.add(pid_max_admission_num)
+    # for i, code in enumerate(code_map):
+    #     print('\r\t%.2f%%' % ((i + 1) * 100 / len(code_map)), end='')
+    #     for pid, admissions in patient_admission.items():
+    #         for admission in admissions:
+    #             codes = admission_codes[admission[EHRParser.adm_id_col]]
+    #             if code in codes:
+    #                 common_pids.add(pid)
+    #                 break
+    #         else:
+    #             continue
+    #         break
+    # print('\r\t100%')
+    # max_admission_num = 0
+    # pid_max_admission_num = 0
+    # for pid, admissions in patient_admission.items():
+    #     if len(admissions) > max_admission_num:
+    #         max_admission_num = len(admissions)
+    #         pid_max_admission_num = pid
+    # common_pids.add(pid_max_admission_num)
+    # print("common_pids: %d" % len(common_pids))
     remaining_pids = np.array(list(set(patient_admission.keys()).difference(common_pids)))
+    print("remaining_pids: %d" % len(remaining_pids))
     np.random.shuffle(remaining_pids)
 
     valid_num = len(patient_admission) - train_num - test_num

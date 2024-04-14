@@ -11,8 +11,8 @@ if __name__ == '__main__':
     conf = {
         'mimic3': {
             'parser': Mimic3Parser,
-            'train_num': 6000,
-            'test_num': 1000,
+            'train_num': 10,
+            'test_num': 3,
             'threshold': 0.01
         },
         'mimic4': {
@@ -29,9 +29,9 @@ if __name__ == '__main__':
             'threshold': 0.01
         }
     }
-    from_saved = True
+    from_saved = False
     data_path = 'data'
-    dataset = 'mimic4'  # mimic3, eicu, or mimic4
+    dataset = 'mimic3'  # mimic3, eicu, or mimic4
     dataset_path = os.path.join(data_path, dataset)
     raw_path = os.path.join(dataset_path, 'raw')
     if not os.path.exists(raw_path):

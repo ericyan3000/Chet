@@ -84,14 +84,17 @@ def evaluate_hf(model, dataset, loss_fn, output_size=1, historical=None):
     for step in range(len(dataset)):
         code_x, visit_lens, divided, y, neighbors = dataset[step]
         output = model(code_x, divided, neighbors, visit_lens).squeeze()
+        if output.dim() == 0:  # output is a scalar
+            output = output.unsqueeze(0)
         loss = loss_fn(output, y)
         total_loss += loss.item() * output_size * len(code_x)
-        output = output.detach().cpu().numpy()
-        outputs.append(output)
-        pred = (output > 0.5).astype(int)
-        preds.append(pred)
+        outputs.append(output.detach().cpu().numpy())
+        pred = (output > 0.5).int()
+        preds.append(pred.numpy())
         print('\r    Evaluating step %d / %d' % (step + 1, len(dataset)), end='')
+    #print("dataset size: ", dataset.size())
     avg_loss = total_loss / dataset.size()
+    #print("\noutputs: ", outputs) 
     outputs = np.concatenate(outputs)
     preds = np.concatenate(preds)
     auc = roc_auc_score(labels, outputs)

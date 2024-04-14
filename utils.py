@@ -74,6 +74,7 @@ class MultiStepLRScheduler:
 
     def _generate_lr(self, milestones, lrs):
         milestones = [1] + milestones + [self.epochs + 1]
+        print("milestones: ", milestones)
         lrs = [self.init_lr] + lrs
         lr_grouped = np.concatenate([np.ones((milestones[i + 1] - milestones[i], )) * lrs[i]
                                      for i in range(len(milestones) - 1)])
